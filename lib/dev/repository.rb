@@ -18,13 +18,13 @@ module Dev
     def load!
       @store = nil # force refresh
       store.transaction(true) do
-        @apps = store[:apps]
+        @projects = store[:projects]
       end
     end
 
     def save!
       store.transaction do
-        store[:apps] = apps
+        store[:projects] = projects
       end
     end
 
@@ -33,26 +33,26 @@ module Dev
       save!
     end
 
-    def apps
-      @apps ||= []
+    def projects
+      @projects ||= []
     end
 
-    def add_app(app)
-      app.validate!
-      app_already_added! if apps.include?(app)
-      apps << app
+    def add_project(project)
+      project.validate!
+      project_already_added! if projects.include?(project)
+      projects << project
     end
 
-    def remove_app(app)
-      apps.delete(app) || app_not_found!
+    def remove_project(project)
+      projects.delete(project) || project_not_found!
     end
 
-    def app_already_added!
-      raise AlreadyAddedError, 'app has already been added'
+    def project_already_added!
+      raise AlreadyAddedError, 'project has already been added'
     end
 
-    def app_not_found!
-      raise RecordNotFound, 'no matching app could be found'
+    def project_not_found!
+      raise RecordNotFound, 'no matching project could be found'
     end
   end
 end

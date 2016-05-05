@@ -1,6 +1,6 @@
 
 module Dev
-  class App < Model
+  class Project < Model
     attr_reader :name, :path
 
     def initialize(name:, path:)

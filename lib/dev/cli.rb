@@ -1,12 +1,12 @@
-require_relative 'command/app'
+require_relative 'command/project'
 require_relative 'command/config'
 
 module Dev
   Error = Class.new(StandardError)
 
   class CLI < Thor
-    desc 'app SUBCOMMAND ...ARGS', 'manage your dockerized applications'
-    subcommand 'app', Command::App
+    desc 'project SUBCOMMAND ...ARGS', 'manage your dockerized projects'
+    subcommand 'project', Command::Project
 
     desc 'config SUBCOMMAND ...ARGS', 'configure this development system'
     subcommand 'config', Command::Config

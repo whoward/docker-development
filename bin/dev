@@ -3,7 +3,7 @@
 $LOAD_PATH.unshift File.join(__dir__, '..', 'lib')
 
 require 'dev'
-require 'pry' if System.debug_mode?
+require 'pry' if Dev::System.debug_mode?
 
 Dev::Repository.load!
 

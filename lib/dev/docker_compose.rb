@@ -16,15 +16,15 @@ module Dev
         raise(NotInstalledError, 'docker-compose is not present or is not executable')
     end
 
-    def initialize(app)
-      @app = app
+    def initialize(project)
+      @project = project
     end
 
     # executes docker-compose with the given arguments
     def command(*arguments)
       self.class.ensure_installed!
 
-      Dir.chdir(app.directory) do
+      Dir.chdir(project.directory) do
         command = Shellwords.join([self.class.executable, *arguments])
 
         stdout, status = Open3.capture2(command)
@@ -74,7 +74,7 @@ module Dev
 
     private
 
-    attr_reader :app
+    attr_reader :project
 
     def command_failed!(command, status)
       raise CommandFailed, "#{command.inspect} failed with status #{status.to_i}"

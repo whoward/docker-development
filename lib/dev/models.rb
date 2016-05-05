@@ -13,4 +13,4 @@ module Dev
   end
 end
 
-require_relative 'models/app'
+require_relative 'models/project'
