@@ -2,8 +2,6 @@ require_relative 'command/project'
 require_relative 'command/config'
 
 module Dev
-  Error = Class.new(StandardError)
-
   class CLI < Thor
     desc 'project SUBCOMMAND ...ARGS', 'manage your dockerized projects'
     subcommand 'project', Command::Project

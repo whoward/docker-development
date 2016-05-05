@@ -3,6 +3,10 @@ require 'docker-api'
 
 require 'pathname'
 
+module Dev
+  Error = Class.new(StandardError)
+end
+
 require 'dev/subcommand'
 require 'dev/cli'
 require 'dev/models'

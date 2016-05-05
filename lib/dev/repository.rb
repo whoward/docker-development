@@ -19,18 +19,26 @@ module Dev
       @store = nil # force refresh
       store.transaction(true) do
         @projects = store[:projects]
+        @config = store[:config]
       end
+      self
     end
 
     def save!
       store.transaction do
         store[:projects] = projects
+        store[:config] = config
       end
+      self
     end
 
     def transaction(&block)
       instance_exec(&block)
       save!
+    end
+
+    def config
+      @config ||= {}
     end
 
     def projects
