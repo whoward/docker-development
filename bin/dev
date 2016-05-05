@@ -3,6 +3,8 @@
 $LOAD_PATH.unshift File.join(__dir__, '..', 'lib')
 
 require 'dev'
-require 'pry' if ENV['DEBUG']
+require 'pry' if System.debug_mode?
+
+Dev::Repository.load!
 
 Dev::CLI.start

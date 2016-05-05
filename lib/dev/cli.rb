@@ -11,11 +11,6 @@ module Dev
     desc 'config SUBCOMMAND ...ARGS', 'configure this development system'
     subcommand 'config', Command::Config
 
-    def self.start(*args, &block)
-      Repository.load!
-      super(*args, &block)
-    end
-
     def self.dispatch(*args, &block)
       super(*args, &block)
     rescue StandardError => e
