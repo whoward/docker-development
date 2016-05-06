@@ -13,11 +13,16 @@ module Dev
 
     # returns a collection of projects on the actual filesystem
     def projects
-      @projects ||= find_projects
+      @projects ||= ModelCollection.new(
+        records: find_projects,
+        record_class: Project
+      )
     end
 
     def up(project)
-      # TODO:
+      staged_project = projects.find_by!(name: project.name)
+
+      DockerCompose.new(staged_project).up
     end
 
     def sync(project)

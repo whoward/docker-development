@@ -1,6 +1,8 @@
 
 module Dev
   class Project < Model
+    define_singleton_method(:name) { 'Project' }
+
     attr_reader :name, :path
 
     def initialize(name:, path:)
@@ -31,17 +33,17 @@ module Dev
 
     private
 
-    # this is the method called by Marshal to reinstantiate a serialized object
-    def self._load(hash)
-      new(hash)
-    end
-
     # this defines the serialized value of this object
     def marshal_dump
       {
         name: name,
         path: path.realpath
       }
+    end
+
+    def marshal_load(hash)
+      @name = hash[:name]
+      @path = Pathname(hash[:path])
     end
 
     def invalid(reason)

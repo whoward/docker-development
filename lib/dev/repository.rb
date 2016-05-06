@@ -1,4 +1,4 @@
-require 'yaml/store'
+require 'pstore'
 
 module Dev
   module Repository
@@ -9,7 +9,7 @@ module Dev
     end
 
     def store
-      @store ||= YAML::Store.new(storage_filename)
+      @store ||= PStore.new(storage_filename)
     end
 
     def load!
