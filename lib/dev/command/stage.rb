@@ -23,11 +23,19 @@ module Dev
         end
       end
 
-      desc 'sync [project-name]', 'synchronizes the docker-compose files for a stage'
+      desc 'sync [project-name]', 'synchronizes the docker-compose stage'
       def sync(*names)
-        projects(names).each do |project|
+        projects(names, repository: Dev::Repository).each do |project|
           Dev::Stage.sync(project)
           puts "#{project} - synchronized"
+        end
+      end
+
+      desc 'rm [project-name]', 'removes the project from the stage'
+      def rm(*names)
+        projects(names).each do |project|
+          Dev::Stage.rm(project)
+          puts "#{project} - removed"
         end
       end
 
@@ -51,8 +59,8 @@ module Dev
 
       private
 
-      def projects(names)
-        result = fetch_projects(names)
+      def projects(names, *args)
+        result = fetch_projects(names, *args)
         if result.empty?
           $stderr.puts 'Nothing to do! Specify at least one project name or add the --all flag'
           exit(1)
@@ -61,11 +69,11 @@ module Dev
         end
       end
 
-      def fetch_projects(names)
+      def fetch_projects(names, repository: Dev::Stage)
         if options[:all]
-          Repository.projects
+          repository.projects
         else
-          Repository.projects.find_all_by!(
+          repository.projects.find_all_by!(
             name: names.method(:include?).to_proc,
             expect: names.length
           )

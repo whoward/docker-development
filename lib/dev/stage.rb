@@ -34,6 +34,10 @@ module Dev
          .write DockerCompose.new(project).configuration
     end
 
+    def rm(project)
+      directory.join(project.name).rmtree
+    end
+
     # private
 
     def invalidate!
