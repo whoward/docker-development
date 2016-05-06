@@ -10,6 +10,7 @@ module Dev
         case state['Status']
         when 'exited' then "Exit #{state['ExitCode']}"
         when 'running' then state['Status'].capitalize
+        when 'not_created' then 'Not created'
         else state.to_json
         end
       end

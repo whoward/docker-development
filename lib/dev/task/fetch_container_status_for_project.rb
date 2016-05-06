@@ -15,6 +15,11 @@ module Dev
           result[name] = json['State']
         end
 
+        services.each do |service|
+          next if result.keys.grep(/_#{service}_/).any?
+          result[service] = { 'Status' => 'not_created' }
+        end
+
         result
       end
 
@@ -26,6 +31,10 @@ module Dev
       # TODO: what about containers we haven't created yet???
       def container_ids
         @container_ids ||= DockerCompose.new(project).container_ids
+      end
+
+      def services
+        @services ||= DockerCompose.new(project).services
       end
 
       # gets information about the containers from the Docker API

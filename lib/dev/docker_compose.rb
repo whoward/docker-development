@@ -49,6 +49,8 @@ module Dev
     end
 
     # returns a list of all services in the docker-compose file
+    # N.B. the services do not have the project name prefix nor the scale suffix
+    #      which you find on container names
     def services
       command(:config, '--services').split
     end
@@ -59,13 +61,6 @@ module Dev
       command(:version).split(/\n/)
                        .map { |v| v.split(/\s*version:?\s*/) }
                        .to_h
-    end
-
-    # returns the result of 'ps' with some simple parsing
-    def status
-      command(:ps).split(/\n/)
-                  .drop(2)
-                  .map(&method(:parse_status_line))
     end
 
     def container_ids
@@ -86,24 +81,6 @@ module Dev
 
     def command_failed!(command, status)
       raise CommandFailed, "#{command.inspect} failed with status #{status.to_i}"
-    end
-
-    def parse_status_line(line)
-      words = line.split
-
-      result = {}
-      result[:name] = words.shift
-
-      result[:command] = []
-      result[:command] << words.shift until words[0] =~ /^(Up|Exit)$/
-      result[:command] = result[:command].join(' ')
-
-      result[:status] = words.shift
-      result[:status] << " #{words.shift}" if result[:status] == 'Exit'
-
-      result[:ports] = words.any? ? words.map { |w| w.gsub!(/,$/, '') } : nil
-
-      result
     end
   end
 end
