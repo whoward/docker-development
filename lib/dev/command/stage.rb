@@ -9,31 +9,50 @@ module Dev
 
       desc 'up [project-name]', 'bring up a project'
       def up(*names)
-        projects = projects(names)
-
-        projects.each do |project|
+        projects(names).each do |project|
           Dev::Stage.up(project)
-          puts "#{project.name} - up"
+          puts "#{project} - up"
         end
-
-        puts 'Nothing to bring up!' if projects.empty?
       end
 
       desc 'sync [project-name]', 'synchronizes the docker-compose files for a stage'
       def sync(*names)
-        projects = projects(names)
-
-        projects.each do |project|
+        projects(names).each do |project|
           Dev::Stage.sync(project)
-          puts "#{project.name} - synchronized"
+          puts "#{project} - synchronized"
         end
+      end
 
-        puts 'Nothing to sync!' if projects.empty?
+      desc 'status [project-name]', 'prints the status of a project'
+      def status(*names)
+        projects(names).each do |project|
+          statuses = Task::FetchContainerStatusForProject.new(project).status
+
+          if statuses.none?
+            puts "#{project} - DOWN"
+          else
+            puts project
+            statuses.each do |container, status|
+              humanized_status = Task::HumanizeDockerState.new(status)
+              puts "\t#{container} - #{humanized_status}"
+            end
+          end
+        end
       end
 
       private
 
       def projects(names)
+        result = fetch_projects(names)
+        if result.empty?
+          $stderr.puts 'Nothing to do! Specify at least one project name or add the --all flag'
+          exit(1)
+        else
+          result
+        end
+      end
+
+      def fetch_projects(names)
         if options[:all]
           Repository.projects
         else

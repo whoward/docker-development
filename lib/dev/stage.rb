@@ -42,20 +42,7 @@ module Dev
 
     def find_projects
       ensure_directory!
-      directory.children.map { |c| build_project_from_stage_directory(c) }
-    end
-
-    def build_project_from_stage_directory(path)
-      Project.new(
-        name: path.basename,
-        path: path.join('docker-compose.yml')
-      ).tap(&:validate!)
-    rescue Dev::InvalidError => e
-      invalid_staged_project!(path, e)
-    end
-
-    def invalid_staged_project!(path, ex)
-      raise Dev::InvalidError, "the staged project at #{path} is invalid because #{ex.message.inspect}"
+      directory.children.map { |c| Task::BuildProjectFromStageDirectory.new(c).project }
     end
   end
 end
