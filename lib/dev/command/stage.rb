@@ -9,7 +9,7 @@ module Dev
 
       desc 'up [project-name]', 'bring up a project'
       def up(*names)
-        projects = project(names)
+        projects = projects(names)
 
         projects.each do |project|
           Dev::Stage.up(project)

@@ -25,7 +25,7 @@ module Dev
       self.class.ensure_installed!
 
       Dir.chdir(project.directory) do
-        command = Shellwords.join([self.class.executable, *arguments])
+        command = build_command(arguments)
 
         stdout, status = Open3.capture2(command)
 
@@ -76,6 +76,14 @@ module Dev
 
     attr_reader :project
 
+    def build_command(arguments)
+      Shellwords.join [
+        self.class.executable,
+        '--project-name', project.name,
+        *arguments
+      ]
+    end
+
     def command_failed!(command, status)
       raise CommandFailed, "#{command.inspect} failed with status #{status.to_i}"
     end
@@ -87,12 +95,13 @@ module Dev
       result[:name] = words.shift
 
       result[:command] = []
-      result[:command] << words.shift until words[0] =~ /^(Up|Exit \d+)$/
+      result[:command] << words.shift until words[0] =~ /^(Up|Exit)$/
       result[:command] = result[:command].join(' ')
 
       result[:status] = words.shift
+      result[:status] << " #{words.shift}" if result[:status] == 'Exit'
 
-      result[:ports] = words.map { |w| w.gsub!(/,$/, '') }
+      result[:ports] = words.any? ? words.map { |w| w.gsub!(/,$/, '') } : nil
 
       result
     end
