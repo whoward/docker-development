@@ -11,7 +11,7 @@ module Dev
     end
 
     def ==(other)
-      path.realpath == other.realpath && name.casecmp(other.name).zero?
+      path.realpath == other.path.realpath && name.casecmp(other.name).zero?
     end
 
     def validate
