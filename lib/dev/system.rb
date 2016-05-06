@@ -8,15 +8,25 @@ module Dev
     end
 
     def docker_compose_executable
-      Pathname(__config('docker-compose-binary') || __which_docker_compose)
+      Pathname(config('docker-compose-binary') || which_docker_compose)
     end
 
-    def __config(key)
+    def staging_directory
+      Pathname(config('staging-directory') || default_staging_directory)
+    end
+
+    # private
+
+    def config(key)
       Repository.config[key]
     end
 
-    def __which_docker_compose
-      @__which_docker_compose ||= `which docker-compose`.strip
+    def which_docker_compose
+      @which_docker_compose ||= `which docker-compose`.strip
+    end
+
+    def default_staging_directory
+      Pathname(Dir.home).join('.dev', 'stage')
     end
   end
 end

@@ -11,20 +11,18 @@ module Dev
 
         name = options.fetch(:name) { path.dirname.basename.to_s }
 
-        project = Dev::Project.new(path: path, name: name)
-
-        Repository.transaction { add_project(project) }
+        Repository.transaction do
+          projects.add Dev::Project.new(path: path, name: name)
+        end
 
         puts "Added #{path} successfully"
       end
 
-      desc 'remove <name-or-path>', 'Removes a docker-compose.yml from the repository'
-      def remove(name_or_path)
-        project = Dev::Project.new(path: name_or_path, name: name_or_path)
+      desc 'remove <name>', 'Removes a project from the repository'
+      def remove(name)
+        Repository.transaction { projects.remove_by!(name: name) }
 
-        Repository.transaction { remove_project(project) }
-
-        puts "Removed #{name_or_path.inspect} successfully"
+        puts "Removed #{name.inspect} successfully"
       end
 
       desc 'list', 'List all managed projects'

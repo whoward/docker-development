@@ -2,9 +2,6 @@ require 'yaml/store'
 
 module Dev
   module Repository
-    AlreadyAddedError = Class.new(Dev::Error)
-    RecordNotFound = Class.new(Dev::Error)
-
     module_function
 
     def storage_filename
@@ -17,16 +14,22 @@ module Dev
 
     def load!
       @store = nil # force refresh
+
       store.transaction(true) do
-        @projects = store[:projects]
         @config = store[:config]
+
+        @projects = ModelCollection.new(
+          records: store[:projects],
+          record_class: Project
+        )
       end
+
       self
     end
 
     def save!
       store.transaction do
-        store[:projects] = projects
+        store[:projects] = projects.records
         store[:config] = config
       end
       self
@@ -42,25 +45,7 @@ module Dev
     end
 
     def projects
-      @projects ||= []
-    end
-
-    def add_project(project)
-      project.validate!
-      project_already_added! if projects.include?(project)
-      projects << project
-    end
-
-    def remove_project(project)
-      projects.delete(project) || project_not_found!
-    end
-
-    def project_already_added!
-      raise AlreadyAddedError, 'project has already been added'
-    end
-
-    def project_not_found!
-      raise RecordNotFound, 'no matching project could be found'
+      @projects ||= ModelCollection.new(record_class: Project)
     end
   end
 end

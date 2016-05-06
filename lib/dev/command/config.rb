@@ -4,6 +4,7 @@ module Dev
     class Config < Subcommand
       VALID_KEYS = %w(
         docker-compose-binary
+        staging-directory
       ).freeze
 
       InvalidKeyError = Class.new(Dev::Error)

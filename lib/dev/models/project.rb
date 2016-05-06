@@ -8,9 +8,8 @@ module Dev
       @path = Pathname(path)
     end
 
-    # TODO: this should probably be handled by a generous comparator object
     def ==(other)
-      path == other.path || name.casecmp(other.name).zero?
+      path.realpath == other.realpath && name.casecmp(other.name).zero?
     end
 
     def validate
@@ -26,7 +25,24 @@ module Dev
       path.dirname
     end
 
+    def to_s
+      name
+    end
+
     private
+
+    # this is the method called by Marshal to reinstantiate a serialized object
+    def self._load(hash)
+      new(hash)
+    end
+
+    # this defines the serialized value of this object
+    def marshal_dump
+      {
+        name: name,
+        path: path.realpath
+      }
+    end
 
     def invalid(reason)
       throw :invalid, reason

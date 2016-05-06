@@ -1,16 +1,5 @@
-module Dev
-  InvalidError = Class.new(Dev::Error)
 
-  class Model
-    def validate
-      raise NotImplementedError
-    end
-
-    def validate!
-      reason = validate
-      raise InvalidError, reason if reason
-    end
-  end
-end
+require_relative 'model'
+require_relative 'model_collection'
 
 require_relative 'models/project'
