@@ -43,6 +43,14 @@ module Dev
       command :up, *flags
     end
 
+    def stop(timeout: nil)
+      if timeout
+        command :stop, '--timeout', timeout
+      else
+        command :stop
+      end
+    end
+
     # returns the normalized docker-compose.yml configuration
     def configuration
       command :config

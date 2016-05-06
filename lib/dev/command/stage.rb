@@ -15,6 +15,14 @@ module Dev
         end
       end
 
+      desc 'down [project-name]', 'stop a project'
+      def down(*names)
+        projects(names).each do |project|
+          DockerCompose.new(project).stop
+          puts "#{project} - down"
+        end
+      end
+
       desc 'sync [project-name]', 'synchronizes the docker-compose files for a stage'
       def sync(*names)
         projects(names).each do |project|
@@ -24,6 +32,7 @@ module Dev
       end
 
       desc 'status [project-name]', 'prints the status of a project'
+      option :all, default: true
       def status(*names)
         projects(names).each do |project|
           statuses = Task::FetchContainerStatusForProject.new(project).status
