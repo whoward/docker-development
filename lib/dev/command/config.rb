@@ -12,9 +12,9 @@ module Dev
       desc 'list', 'list all configuration'
       def list
         Repository.config.each do |key, value|
-          puts "#{key} = #{value}"
+          log.info "#{key} = #{value}"
         end
-        puts 'no configuration' if Repository.config.empty?
+        log.info 'no configuration' if Repository.config.empty?
       end
 
       desc 'set <key> <value>', 'assign a configuration value'
@@ -25,7 +25,7 @@ module Dev
 
         Repository.transaction { config[key] = value }
 
-        puts "#{key} = #{value}"
+        log.info "#{key} = #{value}"
       end
 
       desc 'unset <key>', 'clears the value of the provided key'
@@ -36,10 +36,16 @@ module Dev
 
         Repository.transaction { config.delete(key) }
 
-        puts "#{key} unassigned"
+        log.info "#{key} unassigned"
       end
 
       map 'ls' => 'list'
+
+      private
+
+      def log
+        Dev.logger
+      end
     end
   end
 end

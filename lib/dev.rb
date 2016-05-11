@@ -1,10 +1,15 @@
 require 'thor'
 require 'docker-api'
+require 'tty'
 
 require 'pathname'
 
 module Dev
   Error = Class.new(StandardError)
+
+  def self.logger
+    @logger ||= System.logger
+  end
 end
 
 require 'dev/subcommand'

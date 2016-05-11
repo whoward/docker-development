@@ -15,24 +15,30 @@ module Dev
           projects.add Dev::Project.new(path: path, name: name)
         end
 
-        puts "Added #{path} successfully"
+        log.info "Added #{path} successfully"
       end
 
       desc 'remove <name>', 'Removes a project from the repository'
       def remove(name)
         Repository.transaction { projects.remove_by!(name: name) }
 
-        puts "Removed #{name.inspect} successfully"
+        log.info "Removed #{name.inspect} successfully"
       end
 
       desc 'list', 'List all managed projects'
       def list
-        Repository.projects.each { |project| puts "#{project.name}: #{project.path}" }
-        puts 'No projects' if Repository.projects.empty?
+        Repository.projects.each { |project| log.info "#{project.name}: #{project.path}" }
+        log.info 'No projects' if Repository.projects.empty?
       end
 
       map 'rm' => 'remove'
       map 'ls' => 'list'
+
+      private
+
+      def log
+        Dev.logger
+      end
     end
   end
 end

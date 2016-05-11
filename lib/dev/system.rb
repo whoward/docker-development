@@ -1,3 +1,4 @@
+require_relative 'logger/tty_logger'
 
 module Dev
   module System
@@ -15,6 +16,10 @@ module Dev
       Pathname(config('staging-directory') || default_staging_directory)
     end
 
+    def logger
+      @logger ||= build_logger
+    end
+
     # private
 
     def config(key)
@@ -27,6 +32,10 @@ module Dev
 
     def default_staging_directory
       Pathname(Dir.home).join('.dev', 'stage')
+    end
+
+    def build_logger
+      Logger::TTYLogger
     end
   end
 end

@@ -17,4 +17,5 @@ Gem::Specification.new do |spec|
 
   spec.add_dependency 'thor'
   spec.add_dependency 'docker-api'
+  spec.add_dependency 'tty'
 end

@@ -11,7 +11,7 @@ module Dev
       def up(*names)
         projects(names).each do |project|
           Dev::Stage.up(project)
-          puts "#{project} - up"
+          log.info "#{project} - up"
         end
       end
 
@@ -19,7 +19,7 @@ module Dev
       def down(*names)
         projects(names).each do |project|
           DockerCompose.new(project).stop
-          puts "#{project} - down"
+          log.info "#{project} - down"
         end
       end
 
@@ -27,7 +27,7 @@ module Dev
       def sync(*names)
         projects(names, repository: Dev::Repository).each do |project|
           Dev::Stage.sync(project)
-          puts "#{project} - synchronized"
+          log.info "#{project} - synchronized"
         end
       end
 
@@ -35,7 +35,7 @@ module Dev
       def rm(*names)
         projects(names).each do |project|
           Dev::Stage.rm(project)
-          puts "#{project} - removed"
+          log.info "#{project} - removed"
         end
       end
 
@@ -46,12 +46,12 @@ module Dev
           statuses = Task::FetchContainerStatusForProject.new(project).status
 
           if statuses.none?
-            puts "#{project} - DOWN"
+            log.info "#{project} - DOWN"
           else
-            puts project
+            log.info project
             statuses.each do |container, status|
               humanized_status = Task::HumanizeDockerState.new(status)
-              puts "\t#{container} - #{humanized_status}"
+              log.info "\t#{container} - #{humanized_status}"
             end
           end
         end
@@ -59,10 +59,14 @@ module Dev
 
       private
 
+      def log
+        Dev.logger
+      end
+
       def projects(names, *args)
         result = fetch_projects(names, *args)
         if result.empty?
-          $stderr.puts 'Nothing to do! Specify at least one project name or add the --all flag'
+          log.error 'Nothing to do! Specify at least one project name or add the --all flag'
           exit(1)
         else
           result

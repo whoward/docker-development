@@ -15,8 +15,8 @@ module Dev
 
     def self.dispatch(*args, &block)
       super(*args, &block)
-    rescue StandardError => e
-      $stderr.puts "#{e.class}: #{e.message}"
+    rescue StandardError => exception
+      Dev.logger.error(exception)
       exit(1)
     end
   end
