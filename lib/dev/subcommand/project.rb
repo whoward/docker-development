@@ -1,7 +1,7 @@
 
 module Dev
-  module Command
-    class Project < Subcommand
+  module Subcommand
+    class Project < Thor::Subcommand
       desc 'add <path>', 'Adds a new docker-compose.yml file to the repository'
       option :name, type: :string,
                     banner: '<project name>',

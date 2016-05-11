@@ -1,7 +1,7 @@
 
 module Dev
-  module Command
-    class Stage < Subcommand
+  module Subcommand
+    class Stage < Thor::Subcommand
       class_option :all, type: :boolean,
                          default: false,
                          aliases: %i(-A),

@@ -1,7 +1,7 @@
 
 module Dev
-  module Command
-    class Config < Subcommand
+  module Subcommand
+    class Config < Thor::Subcommand
       VALID_KEYS = %w(
         docker-compose-binary
         staging-directory
