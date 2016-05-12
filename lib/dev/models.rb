@@ -2,4 +2,4 @@
 require_relative 'model'
 require_relative 'model_collection'
 
-require_relative 'models/project'
+Dev::Util.require_tree Pathname(__dir__).join('models')

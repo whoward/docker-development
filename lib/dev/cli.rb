@@ -1,6 +1,6 @@
-require_relative 'subcommand/project'
-require_relative 'subcommand/config'
-require_relative 'subcommand/stage'
+
+Dev::Util.require_tree Pathname(__dir__).join('subcommand')
+Dev::Util.require_tree Pathname(__dir__).join('command')
 
 module Dev
   class CLI < Thor

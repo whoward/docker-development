@@ -29,7 +29,7 @@ module Dev
 
         stdout, status = Open3.capture2(command)
 
-        puts stdout if System.debug_mode?
+        Dev.logger.debug "$ #{command}\n#{stdout}\n"
 
         command_failed!(command, status) unless status.success?
 

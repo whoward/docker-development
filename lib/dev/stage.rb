@@ -34,7 +34,7 @@ module Dev
          .write DockerCompose.new(project).configuration
     end
 
-    def rm(project)
+    def remove(project)
       directory.join(project.name).rmtree
     end
 

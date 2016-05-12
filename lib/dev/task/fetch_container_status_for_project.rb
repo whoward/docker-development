@@ -20,6 +20,7 @@ module Dev
           result[service] = { 'Status' => 'not_created' }
         end
 
+        # TODO: cast to new model ContainerStatus
         result
       end
 
@@ -28,7 +29,6 @@ module Dev
       attr_reader :project
 
       # Uses the docker-compose CLI to fetch the associated container IDs
-      # TODO: what about containers we haven't created yet???
       def container_ids
         @container_ids ||= DockerCompose.new(project).container_ids
       end

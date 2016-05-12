@@ -5,19 +5,18 @@ module Dev
       module_function
 
       def stdout(msg)
-        out($stdout, msg)
+        $stdout.puts format(msg)
       end
 
       def stderr(msg)
-        out($stderr, Pastel.new.red.bold(msg))
+        $stderr.puts Pastel.new.red.bold(format(msg))
       end
 
       def debug(msg)
-        stdout(msg) if System.debug_mode
+        stdout(msg) if System.debug_mode?
       end
 
       class << self
-        alias debug stdout
         alias info stdout
         alias warn stdout
 
@@ -27,13 +26,17 @@ module Dev
         alias unknown stdout
       end
 
-      def out(io, msg)
+      def format(msg)
         case msg
-        when String then io.puts(msg)
-        when Dev::Error then io.puts("#{msg.class}: #{msg.message}")
-        when Exception then raise msg # TODO: dump with full stack trace
-        else io.puts msg.to_s
+        when String then msg
+        when Dev::Error then format_exception(msg) # TODO: only dump a backtrace if configured to
+        when Exception then format_exception(msg)
+        else msg.to_s
         end
+      end
+
+      def format_exception(ex)
+        "#{ex.class}: #{ex.message}\n  #{ex.backtrace.join("\n  ")}"
       end
     end
   end
