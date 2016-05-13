@@ -12,15 +12,14 @@ module Dev
         containers.map do |json|
           name = json['Name'].sub(%r{^/}, '') # remove any leading slash from the name
 
-          result[name] = json['State']
+          result[name] = ContainerStatus.new(json['State'])
         end
 
         services.each do |service|
           next if result.keys.grep(/_#{service}_/).any?
-          result[service] = { 'Status' => 'not_created' }
+          result[service] = ContainerStatus::NotCreated
         end
 
-        # TODO: cast to new model ContainerStatus
         result
       end
 
