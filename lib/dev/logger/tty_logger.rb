@@ -29,14 +29,18 @@ module Dev
       def format(msg)
         case msg
         when String then msg
-        when Dev::Error then format_exception(msg) # TODO: only dump a backtrace if configured to
+        when Dev::Error then format_exception(msg)
         when Exception then format_exception(msg)
         else msg.to_s
         end
       end
 
       def format_exception(ex)
-        "#{ex.class}: #{ex.message}\n  #{ex.backtrace.join("\n  ")}"
+        if System.debug_mode? || !ex.is_a?(Dev::Error)
+          "#{ex.class}: #{ex.message}\n  #{ex.backtrace.join("\n  ")}"
+        else
+          ex.message
+        end
       end
     end
   end
