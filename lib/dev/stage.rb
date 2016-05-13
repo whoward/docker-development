@@ -25,13 +25,22 @@ module Dev
       DockerCompose.new(staged_project).up
     end
 
+    def down(project)
+      staged_project = projects.find_by!(name: project.name)
+
+      DockerCompose.new(staged_project).stop
+    end
+
     def sync(project)
+      yaml = DockerCompose.new(project).configuration
+
+      yaml = Task::RepairGeneratedDockerCompose.new(yaml).call
+
       dir = directory.join(project.name)
 
       dir.mkpath unless dir.exist?
 
-      dir.join('docker-compose.yml')
-         .write DockerCompose.new(project).configuration
+      dir.join('docker-compose.yml').write(yaml)
     end
 
     def remove(project)
