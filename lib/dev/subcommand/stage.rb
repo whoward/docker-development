@@ -33,6 +33,12 @@ module Dev
         Command::Stage::Status.perform(names: names, options: options)
       end
 
+      desc 'list', 'list all staged projects'
+      def list
+        Command::Stage::List.perform(options: options)
+      end
+
+      map 'ls' => 'list'
     end
   end
 end
