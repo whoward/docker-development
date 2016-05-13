@@ -4,13 +4,19 @@ module Dev
     module Project
       class List < Base
         def perform
-          return no_projects! if Repository.projects.empty?
+          return no_projects! if projects.empty?
 
-          Repository.projects.each do |project|
+          projects.each do |project|
             table << [project.name, project.path]
           end
 
           log.info table.render(:unicode, padding: [0, 1, 0, 1])
+        end
+
+        private
+
+        def projects
+          @projects ||= Repository.projects.sort_by(&:name)
         end
 
         def no_projects!
