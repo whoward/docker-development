@@ -8,6 +8,10 @@ module Dev
       ENV['DEBUG'] == 'true'
     end
 
+    def print_stack_traces?
+      debug_mode? || config('print-stack-traces') == 'true'
+    end
+
     def docker_compose_executable
       Pathname(config('docker-compose-binary') || which_docker_compose)
     end

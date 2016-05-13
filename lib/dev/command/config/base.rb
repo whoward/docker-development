@@ -7,6 +7,7 @@ module Dev
         VALID_KEYS = %w(
           docker-compose-binary
           staging-directory
+          print-stack-traces
         ).freeze
 
         protected

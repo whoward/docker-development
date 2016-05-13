@@ -36,11 +36,15 @@ module Dev
       end
 
       def format_exception(ex)
-        if System.debug_mode? || !user_error?(ex)
+        if print_stack_trace?(ex)
           "#{ex.class}: #{ex.message}\n  #{ex.backtrace.join("\n  ")}"
         else
           ex.message
         end
+      end
+
+      def print_stack_trace?(ex)
+        System.print_stack_traces? || !user_error?(ex)
       end
 
       def user_error?(ex)
