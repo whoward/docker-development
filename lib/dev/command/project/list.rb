@@ -10,7 +10,7 @@ module Dev
             table << [project.name, project.path]
           end
 
-          log.info table.render(:ascii, padding: [0, 1, 0, 1])
+          log.info table.render(:unicode, padding: [0, 1, 0, 1])
         end
 
         def no_projects!
