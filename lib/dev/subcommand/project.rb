@@ -7,38 +7,21 @@ module Dev
                     banner: '<project name>',
                     desc: 'provide a custom name for the project'
       def add(path)
-        path = Pathname(path)
-
-        name = options.fetch(:name) { path.dirname.basename.to_s }
-
-        Repository.transaction do
-          projects.add Dev::Project.new(path: path, name: name)
-        end
-
-        log.info "Added #{path} successfully"
+        Command::Project::Add.perform(path: path, options: options)
       end
 
       desc 'remove <name>', 'Removes a project from the repository'
       def remove(name)
-        Repository.transaction { projects.remove_by!(name: name) }
-
-        log.info "Removed #{name.inspect} successfully"
+        Command::Project::Remove.perform(name: name, options: options)
       end
 
       desc 'list', 'List all managed projects'
       def list
-        Repository.projects.each { |project| log.info "#{project.name}: #{project.path}" }
-        log.info 'No projects' if Repository.projects.empty?
+        Command::Project::List.perform(options: options)
       end
 
       map 'rm' => 'remove'
       map 'ls' => 'list'
-
-      private
-
-      def log
-        Dev.logger
-      end
     end
   end
 end

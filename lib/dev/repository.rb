@@ -35,8 +35,8 @@ module Dev
       self
     end
 
-    def transaction(&block)
-      instance_exec(&block)
+    def transaction(context = nil, &block)
+      instance_exec(context, &block)
       save!
     end
 
