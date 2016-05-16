@@ -7,7 +7,7 @@ module Dev
           return no_projects! if projects.empty?
 
           projects.each do |project|
-            table << [project.name, project.path]
+            table << [project.name, project.path, project.compose_file.build_name]
           end
 
           log.info table.render(:unicode, padding: [0, 1, 0, 1])
@@ -24,7 +24,7 @@ module Dev
         end
 
         def table
-          @table ||= TTY::Table.new %w(Name File), []
+          @table ||= TTY::Table.new %w(Name File Build), []
         end
       end
     end

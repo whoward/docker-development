@@ -23,7 +23,7 @@ module Dev
         def project_summary(project, statuses)
           status = ContainerStatus.combine(statuses)
 
-          "#{colored_dot(status.color)} #{project}"
+          "#{colored_dot(status.color)} #{project} (#{project.compose_file.build_name})"
         end
 
         def colored_dot(color)

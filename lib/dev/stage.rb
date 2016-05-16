@@ -34,7 +34,7 @@ module Dev
     def sync(project)
       yaml = DockerCompose.new(project).configuration
 
-      yaml = Task::RepairGeneratedDockerCompose.new(yaml).call
+      yaml = Task::ModifyGeneratedDockerCompose.new(yaml).call
 
       dir = directory.join(project.name)
 
