@@ -31,6 +31,10 @@ module Dev
       name
     end
 
+    def compose_file
+      @compose_file ||= ComposeFile.new(path)
+    end
+
     private
 
     # this defines the serialized value of this object

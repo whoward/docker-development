@@ -16,7 +16,7 @@ module Dev
         end
 
         services.each do |service|
-          next if result.keys.grep(/_#{service}_/).any?
+          next if result.keys.include?(service) || result.keys.grep(/_#{service}_/).any?
           result[service] = ContainerStatus::NotCreated
         end
 
@@ -33,7 +33,7 @@ module Dev
       end
 
       def services
-        @services ||= DockerCompose.new(project).services
+        @services ||= project.compose_file.service_names
       end
 
       # gets information about the containers from the Docker API
