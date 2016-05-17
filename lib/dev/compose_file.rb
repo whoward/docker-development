@@ -28,6 +28,13 @@ module Dev
       end
     end
 
+    def application_container_image=(image)
+      application_services.each do |_service, data|
+        data.delete('build')
+        data['image'] = image
+      end
+    end
+
     def to_yaml
       data.to_yaml
     end

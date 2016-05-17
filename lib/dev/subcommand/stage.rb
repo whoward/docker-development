@@ -38,6 +38,16 @@ module Dev
         Command::Stage::List.perform(options: options)
       end
 
+      desc 'image [project-name] [image-tag]', 'sets the staged project to use a image'
+      def image(name, image)
+        Command::Stage::Image.perform(name: name, image: image, options: options)
+      end
+
+      desc 'head [project-name]', 'sets the given project to use the local codebase'
+      def head(*names)
+        sync(*names) # for now this is as simple as re-syncing
+      end
+
       map 'ls' => 'list'
     end
   end
