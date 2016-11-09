@@ -67,7 +67,7 @@ module Dev
     private
 
     def match?(record, attributes)
-      attributes.all? { |k,v| v === record.public_send(k) }
+      attributes.all? { |k, v| v === record.public_send(k) }
     end
 
     def already_added!(record = nil)

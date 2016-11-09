@@ -1,4 +1,13 @@
+AllCops:
+  TargetRubyVersion: 2.3
+
 Style/Documentation:
+   Enabled: false
+
+Style/FrozenStringLiteralComment:
+   Enabled: false
+
+Style/CaseEquality:
    Enabled: false
 
 Metrics/LineLength:
