@@ -28,7 +28,7 @@ module Dev
       end
 
       desc 'status [project-name]', 'prints the status of a project'
-      option :all, default: true
+      option :all, type: :boolean, default: true
       def status(*names)
         Command::Stage::Status.perform(names: names, options: options)
       end
@@ -46,6 +46,11 @@ module Dev
       desc 'head [project-name]', 'sets the given project to use the local codebase'
       def head(*names)
         sync(*names) # for now this is as simple as re-syncing
+      end
+
+      desc 'inspect [project-name]', 'print the normalized docker-compose file of a project'
+      def inspect(*names)
+        Command::Stage::Inspect.perform(names: names, options: options)
       end
 
       map 'ls' => 'list'
