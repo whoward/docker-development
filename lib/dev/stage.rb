@@ -41,6 +41,10 @@ module Dev
       dir.mkpath unless dir.exist?
 
       dir.join('docker-compose.yml').write(yaml)
+
+      invalidate!
+
+      projects.find_by(name: String(project.name))
     end
 
     def remove(project)

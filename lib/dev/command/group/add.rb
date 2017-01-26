@@ -11,7 +11,7 @@ module Dev
         end
 
         def perform
-          return unless validate_entries!
+          validate_entries!
 
           log.info 'nothing to add!' if added.empty?
 
@@ -28,14 +28,16 @@ module Dev
           @resolver ||= Resolver.new(Repository.projects, Repository.groups)
         end
 
+        def resolve(name)
+          resolver.project_or_group_for_name(name) || unresolved!(name)
+        end
+
+        def unresolved!(name)
+          raise Dev::Error, "Could not resolve a project or group named #{name.inspect}"
+        end
+
         def validate_entries!
-          entry_names.each do |entry|
-            elem = resolver.project_or_group_for_name(entry)
-            if elem.nil?
-              log.error "Could not find #{entry.inspect}"
-              break false
-            end
-          end
+          entry_names.each(&method(:resolve))
         end
 
         def added
