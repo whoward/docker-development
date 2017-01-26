@@ -1,14 +1,16 @@
 
 module Dev
-  module Resolve
-    module_function
+  class Resolver
+    def initialize(*collections)
+      @collections = Array(collections)
+    end
 
     def project_for_name(name)
-      Repository.projects.find_by(name: String(name))
+      find_by_name(project_collections, name)
     end
 
     def group_for_name(name)
-      Repository.groups.find_by(name: String(name))
+      find_by_name(group_collections, name)
     end
 
     def project_or_group_for_name(name)
@@ -30,7 +32,25 @@ module Dev
       result
     end
 
-    # private
+    private
+
+    attr_reader :collections
+
+    def project_collections
+      @project_collections ||= collections.select { |collection| collection.record_class == Project }
+    end
+
+    def group_collections
+      @group_collections ||= collections.select { |collection| collection.record_class == Group }
+    end
+
+    def find_by_name(collections, name)
+      name = String(name)
+      collections.find do |collection|
+        found = collection.find_by(name: name)
+        break(found) unless found.nil?
+      end
+    end
 
     def _resolve_project_name(name)
       _resolve_project_for_project_name(name) ||
@@ -47,7 +67,7 @@ module Dev
     def _resolve_projects_for_group_name(name)
       group = group_for_name(name)
 
-      projects_for_names(group.project_names) if group
+      projects_for_names(group.entry_names) if group
     end
   end
 end

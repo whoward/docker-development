@@ -24,9 +24,13 @@ module Dev
 
         private
 
+        def resolver
+          @resolver ||= Resolver.new(Repository.projects, Repository.groups)
+        end
+
         def validate_entries!
           entry_names.each do |entry|
-            elem = Resolve.project_or_group_for_name(entry)
+            elem = resolver.project_or_group_for_name(entry)
             if elem.nil?
               log.error "Could not find #{entry.inspect}"
               break false
@@ -48,9 +52,7 @@ module Dev
 
         def create_new_group
           log.info "creating new group: #{name}"
-          group = Dev::Group.new(name: name)
-          Repository.groups.add(group)
-          group
+          Dev::Group.new(name: name).tap { |g| Repository.groups.add(g) }
         end
       end
     end

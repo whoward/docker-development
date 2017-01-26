@@ -21,6 +21,6 @@ require 'dev/system'
 require 'dev/docker_compose'
 require 'dev/compose_file'
 require 'dev/stage'
-require 'dev/resolve'
+require 'dev/resolver'
 
 Dev::Util.require_tree Pathname(__dir__).join('dev', 'task')
