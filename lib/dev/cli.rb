@@ -10,6 +10,9 @@ module Dev
     desc 'stage SUBCOMMAND ...ARGS', 'manage the current project stage'
     subcommand 'stage', Subcommand::Stage
 
+    desc 'group SUBCOMMAND ...ARGS', 'manage the project groups'
+    subcommand 'group', Subcommand::Group
+
     desc 'config SUBCOMMAND ...ARGS', 'configure this development system'
     subcommand 'config', Subcommand::Config
 

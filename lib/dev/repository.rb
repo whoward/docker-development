@@ -17,11 +17,8 @@ module Dev
 
       store.transaction(true) do
         @config = store[:config]
-
-        @projects = ModelCollection.new(
-          records: store[:projects],
-          record_class: Project
-        )
+        @projects = load_projects!
+        @groups = load_groups!
       end
 
       self
@@ -30,6 +27,7 @@ module Dev
     def save!
       store.transaction do
         store[:projects] = projects.records
+        store[:groups] = groups.records
         store[:config] = config
       end
       self
@@ -46,6 +44,20 @@ module Dev
 
     def projects
       @projects ||= ModelCollection.new(record_class: Project)
+    end
+
+    def groups
+      @groups ||= ModelCollection.new(record_class: Group)
+    end
+
+    # private
+
+    def load_projects!
+      ModelCollection.new(records: store[:projects], record_class: Project)
+    end
+
+    def load_groups!
+      ModelCollection.new(records: store[:groups], record_class: Group)
     end
   end
 end
