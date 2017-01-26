@@ -39,11 +39,17 @@ module Dev
         end
 
         def resolver
-          @resolver ||= Resolver.new(projects_repository.projects)
+          @resolver ||= Resolver.new(projects_repository.projects, Repository.groups)
         end
 
         def resolved_projects
-          @resolved ||= names.map { |name| resolver.project_for_name(name) || missing_project(name) }
+          @resolved ||= begin
+            result = resolver.projects_for_names(names)
+
+            result[:missing].each { |name| result[:matches] << missing_project(name) }
+
+            result[:matches]
+          end
         end
       end
     end

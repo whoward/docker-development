@@ -28,8 +28,9 @@ module Dev
       end
 
       desc 'status [project-name]', 'prints the status of a project'
-      option :all, type: :boolean, default: true
+      option :all, type: :boolean, default: false
       def status(*names)
+        options[:all] = true if names.empty?
         Command::Stage::Status.perform(names: names, options: options)
       end
 
@@ -49,8 +50,8 @@ module Dev
       end
 
       desc 'inspect [project-name]', 'print the normalized docker-compose file of a project'
-      def inspect(*names)
-        Command::Stage::Inspect.perform(names: names, options: options)
+      def inspect(name)
+        Command::Stage::Inspect.perform(name: name, options: options)
       end
 
       map 'ls' => 'list'

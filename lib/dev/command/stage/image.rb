@@ -10,6 +10,8 @@ module Dev
         end
 
         def perform
+          ensure_project!
+
           # bring any running services down
           DockerCompose.new(project).stop
 
@@ -28,7 +30,16 @@ module Dev
         attr_reader :name, :image
 
         def project
-          Dev::Stage.projects.find_by(name: name)
+          @project ||= Dev::Stage.projects.find_by(name: name)
+        end
+
+        # TODO: sync the project if it is not already synced
+        def ensure_project!
+          project || no_project!
+        end
+
+        def no_project!
+          raise Dev::Error, "could not resolve a staged project named #{name}"
         end
       end
     end
