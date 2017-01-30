@@ -1,3 +1,4 @@
+require 'tty-prompt'
 
 module Dev
   module Command
@@ -18,6 +19,14 @@ module Dev
 
       def log
         Dev.logger
+      end
+
+      def error(message)
+        raise Dev::Error, message
+      end
+
+      def prompt
+        TTY::Prompt.new
       end
     end
   end

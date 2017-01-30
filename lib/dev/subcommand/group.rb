@@ -12,7 +12,13 @@ module Dev
         Command::Group::List.perform(options: options)
       end
 
+      desc 'remove', 'Remove all or some projects from a group'
+      def remove(name, *entries)
+        Command::Group::Remove.perform(name: name, entries: entries)
+      end
+
       map 'ls' => 'list'
+      map 'rm' => 'remove'
     end
   end
 end

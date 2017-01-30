@@ -33,7 +33,7 @@ module Dev
         end
 
         def unresolved!(name)
-          raise Dev::Error, "Could not resolve a project or group named #{name.inspect}"
+          error("Could not resolve a project or group named #{name.inspect}")
         end
 
         def validate_entries!
